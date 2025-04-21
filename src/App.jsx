@@ -121,7 +121,7 @@ function App() {
             <div>
               <label className="block font-medium">形狀</label>
               <select
-                className="w-full p-3 border rounded-lg bg-yellow-100 shadow-inner"
+                className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
                 value={poop.shape}
                 onChange={(e) =>
                   handlePoopChange(index, "shape", e.target.value)
@@ -137,7 +137,7 @@ function App() {
             <div>
               <label className="block font-medium">潔癖程度</label>
               <select
-                className="w-full p-3 border rounded-lg bg-yellow-100 shadow-inner"
+                className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
                 value={poop.cleanLevel}
                 onChange={(e) =>
                   handlePoopChange(index, "cleanLevel", e.target.value)
@@ -154,7 +154,7 @@ function App() {
         <div>
           <label className="block font-medium">你使用的衛生紙種類？</label>
           <select
-            className="w-full p-3 border rounded-lg bg-yellow-100 shadow-inner"
+            className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
             value={paperType}
             onChange={(e) => setPaperType(e.target.value)}
           >
