@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 const defaultPoops = [
-  { length: "", shape: "條狀", cleanLevel: "普通" },
-  { length: "", shape: "條狀", cleanLevel: "普通" },
-  { length: "", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", shape: "條狀", cleanLevel: "普通" },
 ];
 
 const shapeFactorMap = {
@@ -45,36 +45,31 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let totalSquares = 0;
+    let totalUsed = 0;
     let totalPoops = 0;
 
     poops.forEach((poop) => {
-      if (poop.length !== "") {
+      if (poop.sheetsUsed !== "") {
         totalPoops++;
-        const base = Number(poop.length) * 4;
-        const cleanFactor = cleanFactorMap[poop.cleanLevel] ?? 1;
-        const shapeFactor = shapeFactorMap[poop.shape] ?? 1;
-        totalSquares += base * cleanFactor * shapeFactor;
+        totalUsed += Number(poop.sheetsUsed);
       }
     });
 
-    const factor = toiletPaperFactors[paperType] ?? 1;
-    const finalAmount = Math.round(totalSquares * factor);
-    const averageAmount = totalPoops > 0 ? Math.round(finalAmount / totalPoops) : 0;
+    const averageUsed = totalPoops > 0 ? Math.round(totalUsed / totalPoops) : 0;
 
     let ecoMessage = "";
     if (
-      (paperType === "triple-sheet" && averageAmount > 3) ||
-      (paperType === "sheet" && averageAmount > 4) ||
-      (paperType === "roll" && averageAmount > 7)
+      (paperType === "triple-sheet" && averageUsed > 3) ||
+      (paperType === "sheet" && averageUsed > 4) ||
+      (paperType === "roll" && averageUsed > 7)
     ) {
-      ecoMessage = "🌳 喔不～你平均每次使用了太多衛生紙，等於砍了一小片樹林 😢 一起節省吧！";
+      ecoMessage = "🌳 喔不～你平均每次使用太多了，一起來節省衛生紙吧 😢";
     } else if (totalPoops > 0) {
       ecoMessage = "🌱 你是今天的環保小尖兵！謝謝你愛護地球 💚";
     }
 
     setResult({
-      usage: `你今天平均每次需要 ${averageAmount} ${
+      usage: `你今天平均每次使用了 ${averageUsed} ${
         paperType === "roll" ? "格" : "張"
       }${paperOptions.find((p) => p.value === paperType)?.label} 🧻`,
       ecoMessage,
@@ -105,7 +100,9 @@ function App() {
             </h2>
 
             <div>
-              <label className="block font-medium">便便長度（以一根15公分的🍌為基準）</label>
+              <label className="block font-medium">
+                便便長度（以一根15公分的🍌為基準）
+              </label>
               <input
                 type="number"
                 min="0"
@@ -147,6 +144,21 @@ function App() {
                 <option>有點潔癖</option>
                 <option>極度潔癖</option>
               </select>
+            </div>
+
+            <div>
+              <label className="block font-medium">
+                你實際用了幾{paperType === "roll" ? "格" : "張"}？
+              </label>
+              <input
+                type="number"
+                min="0"
+                className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
+                value={poop.sheetsUsed}
+                onChange={(e) =>
+                  handlePoopChange(index, "sheetsUsed", e.target.value)
+                }
+              />
             </div>
           </div>
         ))}
