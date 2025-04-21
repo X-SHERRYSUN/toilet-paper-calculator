@@ -210,7 +210,7 @@ function App() {
           type="submit"
           className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg"
         >
-          🧻 計算今天的衛生紙用量
+          🧻 計算今天的衛生紙用量⬇️
         </button>
       </form>
 
