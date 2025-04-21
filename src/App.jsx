@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 const defaultPoops = [
-  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通", length: "" },
-  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通", length: "" },
-  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通", length: "" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
 ];
 
 const shapeFactorMap = {
@@ -33,7 +33,7 @@ const paperOptions = [
 
 function App() {
   const [poops, setPoops] = useState(defaultPoops);
-  const [numPoops, setNumPoops] = useState(1);
+  const [numPoops, setNumPoops] = useState(1); // 預設選擇一次大便
   const [result, setResult] = useState(null);
 
   const handlePoopChange = (index, field, value) => {
@@ -45,6 +45,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // 檢查是否每個便便都填寫了 "用了幾張" 的數據
     for (let i = 0; i < numPoops; i++) {
       if (poops[i].sheetsUsed === "" || poops[i].sheetsUsed <= 0) {
         alert(`請輸入第 ${i + 1} 次大便使用的衛生紙數量`);
@@ -52,39 +53,33 @@ function App() {
       }
     }
 
-    let totalUsedInSheetEquivalent = 0;
+    let totalUsed = 0;
     let totalPoops = 0;
 
-    for (let i = 0; i < numPoops; i++) {
-      const poop = poops[i];
-      const used = Number(poop.sheetsUsed);
-      if (used > 0) {
+    poops.forEach((poop) => {
+      if (poop.sheetsUsed !== "") {
         totalPoops++;
-
-        const paperWeight = used * toiletPaperFactors[poop.paperType];
-        const sheetEquivalent = paperWeight / toiletPaperFactors.sheet;
-
-        const shapeFactor = shapeFactorMap[poop.shape] || 1;
-        const cleanFactor = cleanFactorMap[poop.cleanLevel] || 1;
-        const lengthFactor = poop.length ? Math.max(1, parseFloat(poop.length)) : 1;
-
-        const adjustedSheets = sheetEquivalent * shapeFactor * cleanFactor * lengthFactor;
-
-        totalUsedInSheetEquivalent += adjustedSheets;
+        totalUsed += Number(poop.sheetsUsed);
       }
-    }
+    });
 
-    const averageUsed = totalPoops > 0 ? Math.round(totalUsedInSheetEquivalent / totalPoops) : 0;
+    const averageUsed = totalPoops > 0 ? Math.round(totalUsed / totalPoops) : 0;
 
     let ecoMessage = "";
-    if (averageUsed > 6) {
+    if (
+      (poops[0].paperType === "triple-sheet" && averageUsed > 3) ||
+      (poops[0].paperType === "sheet" && averageUsed > 4) ||
+      (poops[0].paperType === "roll" && averageUsed > 7)
+    ) {
       ecoMessage = "🌳 喔不～你平均每次使用太多了，一起來節省衛生紙吧 😢";
     } else if (totalPoops > 0) {
-      ecoMessage = "🌱 你很節省喔！你是今天的環保小尖兵！謝謝你愛護地球 💚";
+      ecoMessage = "🌱 你是今天的環保小尖兵！謝謝你愛護地球 💚";
     }
 
     setResult({
-      usage: `你今天平均每次使用了 ${averageUsed} 張一般抽取式衛生紙 🧻`,
+      usage: `你今天平均每次使用了 ${averageUsed} ${
+        poops[0].paperType === "roll" ? "格" : "張"
+      }${paperOptions.find((p) => p.value === poops[0].paperType)?.label} 🧻`,
       ecoMessage,
     });
   };
@@ -147,7 +142,7 @@ function App() {
 
             <div>
               <label className="block font-medium">
-                便便長度（單位:🍌，請填寫大概等於幾根香蕉）
+                便便長度（以一根15公分的🍌為基準）
               </label>
               <input
                 type="number"
@@ -215,7 +210,7 @@ function App() {
           type="submit"
           className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg"
         >
-          🧻 計算今天的衛生紙用量⬇️
+          🧻 計算今天的衛生紙用量
         </button>
       </form>
 
