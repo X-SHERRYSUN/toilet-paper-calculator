@@ -40,7 +40,7 @@ function App() {
   const getSuggested = (poop) => {
     const { length, shape, cleanLevel } = poop;
     if (length === "") return null;
-    const base = Number(length) * 4;
+    const base = Number(length) * 2.5;
     const shapeFactor = shapeFactorMap[shape] ?? 1;
     const cleanFactor = cleanFactorMap[cleanLevel] ?? 1;
     return Math.round(base * shapeFactor * cleanFactor);
@@ -93,7 +93,7 @@ function App() {
 
       <div className="bg-green-50 p-4 rounded-xl shadow-md w-full max-w-xl mb-6">
         <label className="block font-semibold text-gray-700 mb-2">
-          今天上幾次大號？
+          今天上幾次大號💩？
         </label>
         <select
           value={numPoops}
@@ -127,7 +127,7 @@ function App() {
 
                 <div>
                   <label className="block font-medium">
-                    長度（以一根15cm香蕉為單位）
+                    長度（單位：以一根15cm🍌為基準，💩=幾根🍌）
                   </label>
                   <input
                     type="number"
