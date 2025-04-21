@@ -66,7 +66,7 @@ function App() {
     if (
       (paperType === "triple-sheet" && averageAmount > 3) ||
       (paperType === "sheet" && averageAmount > 4) ||
-      (paperType === "roll" && averageAmount > 6)
+      (paperType === "roll" && averageAmount > 7)
     ) {
       ecoMessage = "🌳 喔不～你平均每次使用了太多衛生紙，等於砍了一小片樹林 😢 一起節省吧！";
     } else if (totalPoops > 0) {
@@ -84,7 +84,7 @@ function App() {
   return (
     <div className="min-h-screen bg-pink-100 p-4 flex flex-col items-center">
       <h1 className="text-4xl font-extrabold text-pink-600 mb-8 text-center animate-pulse">
-        🧻 可愛的衛生紙用量計算器
+        🧻 衛生紙用量計算器
       </h1>
 
       <form
@@ -105,7 +105,7 @@ function App() {
             </h2>
 
             <div>
-              <label className="block font-medium">便便長度（香蕉）</label>
+              <label className="block font-medium">便便長度（以一根15公分的🍌為基準）</label>
               <input
                 type="number"
                 min="0"
