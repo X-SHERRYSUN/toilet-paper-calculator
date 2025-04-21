@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 const defaultPoops = [
-  { sheetsUsed: "", shape: "條狀", cleanLevel: "普通" },
-  { sheetsUsed: "", shape: "條狀", cleanLevel: "普通" },
-  { sheetsUsed: "", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
 ];
 
 const shapeFactorMap = {
@@ -33,7 +33,6 @@ const paperOptions = [
 
 function App() {
   const [poops, setPoops] = useState(defaultPoops);
-  const [paperType, setPaperType] = useState("roll");
   const [result, setResult] = useState(null);
 
   const handlePoopChange = (index, field, value) => {
@@ -100,6 +99,23 @@ function App() {
             </h2>
 
             <div>
+              <label className="block font-medium">你使用的衛生紙種類？</label>
+              <select
+                className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
+                value={poop.paperType}
+                onChange={(e) =>
+                  handlePoopChange(index, "paperType", e.target.value)
+                }
+              >
+                {paperOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
               <label className="block font-medium">
                 便便長度（以一根15公分的🍌為基準）
               </label>
@@ -148,7 +164,7 @@ function App() {
 
             <div>
               <label className="block font-medium">
-                你實際用了幾{paperType === "roll" ? "格" : "張"}？
+                你實際用了幾{poop.paperType === "roll" ? "格" : "張"}？
               </label>
               <input
                 type="number"
@@ -162,21 +178,6 @@ function App() {
             </div>
           </div>
         ))}
-
-        <div>
-          <label className="block font-medium">你使用的衛生紙種類？</label>
-          <select
-            className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-            value={paperType}
-            onChange={(e) => setPaperType(e.target.value)}
-          >
-            {paperOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
 
         <div className="h-6" />
 
