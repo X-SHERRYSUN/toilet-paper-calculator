@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 const defaultPoops = [
-  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
-  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
-  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通", length: "" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通", length: "" },
+  { sheetsUsed: "", paperType: "roll", shape: "條狀", cleanLevel: "普通", length: "" },
 ];
 
 const shapeFactorMap = {
@@ -33,7 +33,7 @@ const paperOptions = [
 
 function App() {
   const [poops, setPoops] = useState(defaultPoops);
-  const [numPoops, setNumPoops] = useState(1); // 預設選擇一次大便
+  const [numPoops, setNumPoops] = useState(1);
   const [result, setResult] = useState(null);
 
   const handlePoopChange = (index, field, value) => {
@@ -45,7 +45,6 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 檢查是否每個便便都填寫了 "用了幾張" 的數據
     for (let i = 0; i < numPoops; i++) {
       if (poops[i].sheetsUsed === "" || poops[i].sheetsUsed <= 0) {
         alert(`請輸入第 ${i + 1} 次大便使用的衛生紙數量`);
@@ -53,33 +52,28 @@ function App() {
       }
     }
 
-    let totalUsed = 0;
+    let totalUsedInSheetEquivalent = 0;
     let totalPoops = 0;
 
-    poops.forEach((poop) => {
-      if (poop.sheetsUsed !== "") {
-        totalPoops++;
-        totalUsed += Number(poop.sheetsUsed);
-      }
+    poops.slice(0, numPoops).forEach((poop) => {
+      const used = Number(poop.sheetsUsed);
+      const factor = toiletPaperFactors[poop.paperType] || 1;
+      const equivalentSheets = used * factor / toiletPaperFactors.sheet;
+      totalUsedInSheetEquivalent += equivalentSheets;
+      totalPoops++;
     });
 
-    const averageUsed = totalPoops > 0 ? Math.round(totalUsed / totalPoops) : 0;
+    const averageUsed = totalPoops > 0 ? Math.round(totalUsedInSheetEquivalent / totalPoops) : 0;
 
     let ecoMessage = "";
-    if (
-      (poops[0].paperType === "triple-sheet" && averageUsed > 3) ||
-      (poops[0].paperType === "sheet" && averageUsed > 4) ||
-      (poops[0].paperType === "roll" && averageUsed > 7)
-    ) {
+    if (averageUsed > 4) {
       ecoMessage = "🌳 喔不～你平均每次使用太多了，一起來節省衛生紙吧 😢";
     } else if (totalPoops > 0) {
       ecoMessage = "🌱 你很節省喔！你是今天的環保小尖兵！謝謝你愛護地球 💚";
     }
 
     setResult({
-      usage: `你今天平均每次使用了 ${averageUsed} ${
-        poops[0].paperType === "roll" ? "格" : "張"
-      }${paperOptions.find((p) => p.value === poops[0].paperType)?.label} 🧻`,
+      usage: `你今天平均每次使用了 ${averageUsed} 張一般抽取式衛生紙 🧻`,
       ecoMessage,
     });
   };
