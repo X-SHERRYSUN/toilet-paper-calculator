@@ -55,32 +55,36 @@ function App() {
     let totalUsedInSheetEquivalent = 0;
     let totalPoops = 0;
 
-    poops.slice(0, numPoops).forEach((poop) => {
+    for (let i = 0; i < numPoops; i++) {
+      const poop = poops[i];
       const used = Number(poop.sheetsUsed);
-      const paperFactor = toiletPaperFactors[poop.paperType] || 1;
-      const baseSheets = used * paperFactor / toiletPaperFactors.sheet;
+      if (used > 0) {
+        totalPoops++;
 
-      const shapeFactor = shapeFactorMap[poop.shape] || 1;
-      const cleanFactor = cleanFactorMap[poop.cleanLevel] || 1;
-      const lengthFactor = poop.length ? Math.max(1, parseFloat(poop.length)) : 1;
+        const paperWeight = used * toiletPaperFactors[poop.paperType];
+        const sheetEquivalent = paperWeight / toiletPaperFactors.sheet;
 
-      const adjustedSheets = baseSheets * shapeFactor * cleanFactor * lengthFactor;
+        const shapeFactor = shapeFactorMap[poop.shape] || 1;
+        const cleanFactor = cleanFactorMap[poop.cleanLevel] || 1;
+        const lengthFactor = poop.length ? Math.max(1, parseFloat(poop.length)) : 1;
 
-      totalUsedInSheetEquivalent += adjustedSheets;
-      totalPoops++;
-    });
+        const adjustedSheets = sheetEquivalent * shapeFactor * cleanFactor * lengthFactor;
+
+        totalUsedInSheetEquivalent += adjustedSheets;
+      }
+    }
 
     const averageUsed = totalPoops > 0 ? Math.round(totalUsedInSheetEquivalent / totalPoops) : 0;
 
     let ecoMessage = "";
-    if (averageUsed > 4) {
+    if (averageUsed > 6) {
       ecoMessage = "🌳 喔不～你平均每次使用太多了，一起來節省衛生紙吧 😢";
     } else if (totalPoops > 0) {
       ecoMessage = "🌱 你很節省喔！你是今天的環保小尖兵！謝謝你愛護地球 💚";
     }
 
     setResult({
-      usage: `你今天平均每次使用了約 ${averageUsed} 張一般抽取式衛生紙 🧻`,
+      usage: `你今天平均每次使用了 ${averageUsed} 張一般抽取式衛生紙 🧻`,
       ecoMessage,
     });
   };
