@@ -73,7 +73,7 @@ function App() {
     ) {
       ecoMessage = "🌳 喔不～你平均每次使用太多了，一起來節省衛生紙吧 😢";
     } else if (totalPoops > 0) {
-      ecoMessage = "🌱 你是今天的環保小尖兵！謝謝你愛護地球 💚";
+      ecoMessage = "🌱 你很節省喔！你是今天的環保小尖兵！謝謝你愛護地球 💚";
     }
 
     setResult({
