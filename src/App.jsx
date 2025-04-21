@@ -57,9 +57,16 @@ function App() {
 
     poops.slice(0, numPoops).forEach((poop) => {
       const used = Number(poop.sheetsUsed);
-      const factor = toiletPaperFactors[poop.paperType] || 1;
-      const equivalentSheets = used * factor / toiletPaperFactors.sheet;
-      totalUsedInSheetEquivalent += equivalentSheets;
+      const paperFactor = toiletPaperFactors[poop.paperType] || 1;
+      const baseSheets = used * paperFactor / toiletPaperFactors.sheet;
+
+      const shapeFactor = shapeFactorMap[poop.shape] || 1;
+      const cleanFactor = cleanFactorMap[poop.cleanLevel] || 1;
+      const lengthFactor = poop.length ? Math.max(1, parseFloat(poop.length)) : 1;
+
+      const adjustedSheets = baseSheets * shapeFactor * cleanFactor * lengthFactor;
+
+      totalUsedInSheetEquivalent += adjustedSheets;
       totalPoops++;
     });
 
@@ -73,7 +80,7 @@ function App() {
     }
 
     setResult({
-      usage: `你今天平均每次使用了 ${averageUsed} 張一般抽取式衛生紙 🧻`,
+      usage: `你今天平均每次使用了約 ${averageUsed} 張一般抽取式衛生紙 🧻`,
       ecoMessage,
     });
   };
