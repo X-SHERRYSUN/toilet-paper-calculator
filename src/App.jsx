@@ -45,6 +45,14 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // 檢查是否每個便便都填寫了 "用了幾張" 的數據
+    for (let i = 0; i < numPoops; i++) {
+      if (poops[i].sheetsUsed === "" || poops[i].sheetsUsed <= 0) {
+        alert(`請輸入第 ${i + 1} 次大便使用的衛生紙數量`);
+        return;
+      }
+    }
+
     let totalUsed = 0;
     let totalPoops = 0;
 
@@ -59,9 +67,9 @@ function App() {
 
     let ecoMessage = "";
     if (
-      (paperType === "triple-sheet" && averageUsed > 3) ||
-      (paperType === "sheet" && averageUsed > 4) ||
-      (paperType === "roll" && averageUsed > 7)
+      (poops[0].paperType === "triple-sheet" && averageUsed > 3) ||
+      (poops[0].paperType === "sheet" && averageUsed > 4) ||
+      (poops[0].paperType === "roll" && averageUsed > 7)
     ) {
       ecoMessage = "🌳 喔不～你平均每次使用太多了，一起來節省衛生紙吧 😢";
     } else if (totalPoops > 0) {
@@ -70,8 +78,8 @@ function App() {
 
     setResult({
       usage: `你今天平均每次使用了 ${averageUsed} ${
-        paperType === "roll" ? "格" : "張"
-      }${paperOptions.find((p) => p.value === paperType)?.label} 🧻`,
+        poops[0].paperType === "roll" ? "格" : "張"
+      }${paperOptions.find((p) => p.value === poops[0].paperType)?.label} 🧻`,
       ecoMessage,
     });
   };
