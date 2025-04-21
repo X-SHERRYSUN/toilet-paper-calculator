@@ -33,6 +33,7 @@ const paperOptions = [
 
 function App() {
   const [poops, setPoops] = useState(defaultPoops);
+  const [numPoops, setNumPoops] = useState(1); // 預設選擇一次大便
   const [result, setResult] = useState(null);
 
   const handlePoopChange = (index, field, value) => {
@@ -86,10 +87,26 @@ function App() {
         className="bg-green-50 rounded-2xl shadow-lg p-6 w-full max-w-xl space-y-8"
       >
         <p className="text-center text-gray-700 font-semibold">
-          請輸入你今天最多三次的 💩 狀況（可留空）
+          請選擇今天最多幾次的 💩 狀況：
         </p>
 
-        {poops.map((poop, index) => (
+        <div className="text-center">
+          <select
+            value={numPoops}
+            onChange={(e) => setNumPoops(Number(e.target.value))}
+            className="p-3 border rounded-lg bg-green-100 shadow-inner"
+          >
+            {[1, 2, 3].map((num) => (
+              <option key={num} value={num}>
+                {num} 次
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="h-6" />
+
+        {Array.from({ length: numPoops }).map((_, index) => (
           <div
             key={index}
             className="border rounded-xl p-6 bg-emerald-50 space-y-5 shadow-xl"
@@ -102,7 +119,7 @@ function App() {
               <label className="block font-medium">你使用的衛生紙種類？</label>
               <select
                 className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                value={poop.paperType}
+                value={poops[index].paperType}
                 onChange={(e) =>
                   handlePoopChange(index, "paperType", e.target.value)
                 }
@@ -124,7 +141,7 @@ function App() {
                 min="0"
                 step="0.1"
                 className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                value={poop.length}
+                value={poops[index].length}
                 onChange={(e) =>
                   handlePoopChange(index, "length", e.target.value)
                 }
@@ -135,7 +152,7 @@ function App() {
               <label className="block font-medium">形狀</label>
               <select
                 className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                value={poop.shape}
+                value={poops[index].shape}
                 onChange={(e) =>
                   handlePoopChange(index, "shape", e.target.value)
                 }
@@ -151,7 +168,7 @@ function App() {
               <label className="block font-medium">潔癖程度</label>
               <select
                 className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                value={poop.cleanLevel}
+                value={poops[index].cleanLevel}
                 onChange={(e) =>
                   handlePoopChange(index, "cleanLevel", e.target.value)
                 }
@@ -164,13 +181,13 @@ function App() {
 
             <div>
               <label className="block font-medium">
-                你實際用了幾{poop.paperType === "roll" ? "格" : "張"}？
+                你實際用了幾{poops[index].paperType === "roll" ? "格" : "張"}？
               </label>
               <input
                 type="number"
                 min="0"
                 className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                value={poop.sheetsUsed}
+                value={poops[index].sheetsUsed}
                 onChange={(e) =>
                   handlePoopChange(index, "sheetsUsed", e.target.value)
                 }
