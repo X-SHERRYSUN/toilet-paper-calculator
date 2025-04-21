@@ -100,7 +100,7 @@ function App() {
             key={index}
             className="border rounded-xl p-6 bg-emerald-50 space-y-5 shadow-xl"
           >
-            <h2 className="font-semibold text-pink-500 text-lg">
+            <h2 className="font-semibold text-green-600 text-lg">
               💩 第 {index + 1} 次
             </h2>
 
@@ -178,7 +178,7 @@ function App() {
 
       {result && (
         <div className="mt-8 text-center bg-white p-6 rounded-2xl shadow-xl space-y-4">
-          <div className="text-xl font-semibold text-pink-800">
+          <div className="text-xl font-semibold text-green-800">
             {result.usage}
           </div>
           {result.ecoMessage && (
