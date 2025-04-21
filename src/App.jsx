@@ -6,7 +6,6 @@ const defaultPoops = [
   { length: "", shape: "條狀", cleanLevel: "普通" },
 ];
 
-// 新增形狀加權表（含顆粒狀）
 const shapeFactorMap = {
   "條狀": 1,
   "一整陀": 1.2,
@@ -14,18 +13,16 @@ const shapeFactorMap = {
   "顆粒狀": 0.8,
 };
 
-// 潔癖加權表
 const cleanFactorMap = {
   "普通": 1,
   "有點潔癖": 1.1,
   "極度潔癖": 1.2,
 };
 
-// 衛生紙乘數表
 const toiletPaperFactors = {
-  roll: 1.2, // 滾筒式以格數顯示
-  sheet: 0.5, // 一般抽取式除2
-  "triple-sheet": 0.3, // 三層式抽取式（再少一點）
+  roll: 1.2,
+  sheet: 0.5,
+  "triple-sheet": 0.3,
 };
 
 const paperOptions = [
@@ -49,26 +46,39 @@ function App() {
     e.preventDefault();
 
     let totalSquares = 0;
+    let totalPoops = 0;
 
     poops.forEach((poop) => {
       if (poop.length !== "") {
-        const base = Number(poop.length) * 4; // 一根香蕉 = 4 格
-
+        totalPoops++;
+        const base = Number(poop.length) * 4;
         const cleanFactor = cleanFactorMap[poop.cleanLevel] ?? 1;
         const shapeFactor = shapeFactorMap[poop.shape] ?? 1;
-
         totalSquares += base * cleanFactor * shapeFactor;
       }
     });
 
     const factor = toiletPaperFactors[paperType] ?? 1;
     const finalAmount = Math.round(totalSquares * factor);
+    const averageAmount = totalPoops > 0 ? Math.round(finalAmount / totalPoops) : 0;
 
-    const finalText = `你今天大約需要 ${finalAmount} ${
-      paperType === "roll" ? "格" : "張"
-    }${paperOptions.find((p) => p.value === paperType)?.label} 🧻`;
+    let ecoMessage = "";
+    if (
+      (paperType === "triple-sheet" && averageAmount > 3) ||
+      (paperType === "sheet" && averageAmount > 4) ||
+      (paperType === "roll" && averageAmount > 6)
+    ) {
+      ecoMessage = "🌳 喔不～你平均每次使用了太多衛生紙，等於砍了一小片樹林 😢 一起節省吧！";
+    } else if (totalPoops > 0) {
+      ecoMessage = "🌱 你是今天的環保小尖兵！謝謝你愛護地球 💚";
+    }
 
-    setResult(finalText);
+    setResult({
+      usage: `你今天平均每次需要 ${averageAmount} ${
+        paperType === "roll" ? "格" : "張"
+      }${paperOptions.find((p) => p.value === paperType)?.label} 🧻`,
+      ecoMessage,
+    });
   };
 
   return (
@@ -120,7 +130,7 @@ function App() {
                 <option>條狀</option>
                 <option>一整陀</option>
                 <option>水狀</option>
-                <option>顆粒狀</option> {/* 新增 */}
+                <option>顆粒狀</option>
               </select>
             </div>
 
@@ -167,8 +177,15 @@ function App() {
       </form>
 
       {result && (
-        <div className="mt-8 text-xl font-semibold text-pink-800 bg-white p-6 rounded-2xl shadow-xl animate-bounce">
-          {result}
+        <div className="mt-8 text-center bg-white p-6 rounded-2xl shadow-xl space-y-4">
+          <div className="text-xl font-semibold text-pink-800">
+            {result.usage}
+          </div>
+          {result.ecoMessage && (
+            <div className="text-green-600 font-bold text-lg animate-bounce">
+              {result.ecoMessage}
+            </div>
+          )}
         </div>
       )}
     </div>
