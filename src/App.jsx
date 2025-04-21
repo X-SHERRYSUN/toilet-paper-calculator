@@ -82,14 +82,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-pink-100 p-4 flex flex-col items-center">
-      <h1 className="text-4xl font-extrabold text-pink-600 mb-8 text-center animate-pulse">
+    <div className="min-h-screen bg-green-100 p-4 flex flex-col items-center">
+      <h1 className="text-4xl font-extrabold text-green-700 mb-8 text-center animate-pulse">
         🧻 衛生紙用量計算器
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-xl space-y-8"
+        className="bg-green-50 rounded-2xl shadow-lg p-6 w-full max-w-xl space-y-8"
       >
         <p className="text-center text-gray-700 font-semibold">
           請輸入你今天最多三次的 💩 狀況（可留空）
@@ -98,7 +98,7 @@ function App() {
         {poops.map((poop, index) => (
           <div
             key={index}
-            className="border rounded-xl p-6 bg-yellow-50 space-y-5 shadow-xl"
+            className="border rounded-xl p-6 bg-emerald-50 space-y-5 shadow-xl"
           >
             <h2 className="font-semibold text-pink-500 text-lg">
               💩 第 {index + 1} 次
@@ -110,7 +110,7 @@ function App() {
                 type="number"
                 min="0"
                 step="0.1"
-                className="w-full p-3 border rounded-lg bg-yellow-100 shadow-inner"
+                className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
                 value={poop.length}
                 onChange={(e) =>
                   handlePoopChange(index, "length", e.target.value)
@@ -170,7 +170,7 @@ function App() {
 
         <button
           type="submit"
-          className="w-full bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-6 rounded-full shadow-lg"
+          className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-full shadow-lg"
         >
           🧻 計算今天的衛生紙用量
         </button>
