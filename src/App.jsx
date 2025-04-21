@@ -142,7 +142,7 @@ function App() {
 
             <div>
               <label className="block font-medium">
-                便便長度（以一根15公分的🍌為基準）
+                便便長度（單位:🍌，請填寫大概等於幾根香蕉）
               </label>
               <input
                 type="number"
