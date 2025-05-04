@@ -77,9 +77,12 @@ function App() {
     let ecoMessage = "";
     if (avgActual > avgSuggested + 2) {
       ecoMessage = "🌳 喔不～你平均使用太多了，幫樹木省點力吧 😢";
-    } else {
+    } else if (avgActual < avgSuggested - 2) {
       ecoMessage = "🌱 你是今天的環保小尖兵！謝謝你愛護地球 💚";
+    } else {
+      ecoMessage = "👍 你的使用量跟建議差不多，繼續保持！";
     }
+
 
     setResult({
       usage: `你今天平均每次使用了 ${avgActual} 張一般抽取式衛生紙 🧻`,
