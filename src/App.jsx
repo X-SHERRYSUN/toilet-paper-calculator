@@ -75,9 +75,9 @@ function App() {
     const avgSuggested = Math.round(totalSuggested / count);
 
     let ecoMessage = "";
-    if (avgActual > avgSuggested + 2) {
+    if (avgActual > avgSuggested + 1) {
       ecoMessage = "🌳 喔不～你平均使用太多了，幫樹木省點力吧 😢";
-    } else if (avgActual < avgSuggested - 2) {
+    } else if (avgActual < avgSuggested) {
       ecoMessage = "🌱 你是今天的環保小尖兵！謝謝你愛護地球 💚";
     } else {
       ecoMessage = "👍 你的使用量跟建議差不多，繼續保持！";
