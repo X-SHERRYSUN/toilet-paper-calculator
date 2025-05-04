@@ -80,7 +80,7 @@ function App() {
 
     setResult({
       usage: `你今天平均每次使用了 ${avgActual} 張一般抽取式衛生紙 🧻`,
-      suggestion: `系統建議用量：約 ${avgSuggested} 張/次`,
+      suggestion: `建議用量：約 ${avgSuggested} 張/次`,
       ecoMessage,
     });
   };
@@ -187,11 +187,6 @@ function App() {
                   />
                 </div>
 
-                {suggested !== null && (
-                  <div className="text-green-700 font-medium mt-2">
-                    🌟 建議用量：約 {suggested} 張
-                  </div>
-                )}
               </div>
             );
           })}
