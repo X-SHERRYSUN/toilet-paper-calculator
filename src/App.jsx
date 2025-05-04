@@ -40,7 +40,7 @@ function App() {
   const getSuggested = (poop) => {
     const { length, shape, cleanLevel } = poop;
     if (length === "") return null;
-    const base = Number(length) * 2.5;
+    const base = Number(length) * 1.9;
     const shapeFactor = shapeFactorMap[shape] ?? 1;
     const cleanFactor = cleanFactorMap[cleanLevel] ?? 1;
     return Math.round(base * shapeFactor * cleanFactor);
