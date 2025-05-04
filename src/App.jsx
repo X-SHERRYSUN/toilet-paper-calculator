@@ -17,6 +17,7 @@ function App() {
   const [numPoops, setNumPoops] = useState(0);
   const [poops, setPoops] = useState([]);
   const [result, setResult] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const handleNumPoopsChange = (e) => {
     const value = parseInt(e.target.value);
@@ -29,6 +30,7 @@ function App() {
     }));
     setPoops(newPoops);
     setResult(null);
+    setShowModal(false);
   };
 
   const handlePoopChange = (index, field, value) => {
@@ -65,6 +67,7 @@ function App() {
 
     if (count === 0) {
       setResult(null);
+      setShowModal(false);
       return;
     }
 
@@ -83,6 +86,7 @@ function App() {
       suggestion: `建議用量：約 ${avgSuggested} 張/次`,
       ecoMessage,
     });
+    setShowModal(true);
   };
 
   return (
@@ -114,82 +118,78 @@ function App() {
           onSubmit={handleSubmit}
           className="bg-green-50 rounded-2xl shadow-lg p-6 w-full max-w-xl space-y-8"
         >
-          {poops.map((poop, index) => {
-            const suggested = getSuggested(poop);
-            return (
-              <div
-                key={index}
-                className="border rounded-xl p-6 bg-emerald-50 space-y-5 shadow-xl"
-              >
-                <h2 className="font-semibold text-green-600 text-lg">
-                  💩 第 {index + 1} 次
-                </h2>
+          {poops.map((poop, index) => (
+            <div
+              key={index}
+              className="border rounded-xl p-6 bg-emerald-50 space-y-5 shadow-xl"
+            >
+              <h2 className="font-semibold text-green-600 text-lg">
+                💩 第 {index + 1} 次
+              </h2>
 
-                <div>
-                  <label className="block font-medium">
-                    長度（單位：以一根15cm🍌為基準，💩=幾根🍌）
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                    value={poop.length}
-                    onChange={(e) =>
-                      handlePoopChange(index, "length", e.target.value)
-                    }
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-medium">形狀</label>
-                  <select
-                    className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                    value={poop.shape}
-                    onChange={(e) =>
-                      handlePoopChange(index, "shape", e.target.value)
-                    }
-                  >
-                    <option>條狀</option>
-                    <option>一整陀</option>
-                    <option>水狀</option>
-                    <option>顆粒狀</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-medium">潔癖程度</label>
-                  <select
-                    className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                    value={poop.cleanLevel}
-                    onChange={(e) =>
-                      handlePoopChange(index, "cleanLevel", e.target.value)
-                    }
-                  >
-                    <option>普通</option>
-                    <option>有點潔癖</option>
-                    <option>極度潔癖</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-medium">
-                    你實際用了幾張（一般抽取式）
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
-                    value={poop.actualUsed}
-                    onChange={(e) =>
-                      handlePoopChange(index, "actualUsed", e.target.value)
-                    }
-                  />
-                </div>
-
+              <div>
+                <label className="block font-medium">
+                  長度（單位：以一根15cm🍌為基準，💩=幾根🍌）
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
+                  value={poop.length}
+                  onChange={(e) =>
+                    handlePoopChange(index, "length", e.target.value)
+                  }
+                />
               </div>
-            );
-          })}
+
+              <div>
+                <label className="block font-medium">形狀</label>
+                <select
+                  className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
+                  value={poop.shape}
+                  onChange={(e) =>
+                    handlePoopChange(index, "shape", e.target.value)
+                  }
+                >
+                  <option>條狀</option>
+                  <option>一整陀</option>
+                  <option>水狀</option>
+                  <option>顆粒狀</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-medium">潔癖程度</label>
+                <select
+                  className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
+                  value={poop.cleanLevel}
+                  onChange={(e) =>
+                    handlePoopChange(index, "cleanLevel", e.target.value)
+                  }
+                >
+                  <option>普通</option>
+                  <option>有點潔癖</option>
+                  <option>極度潔癖</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-medium">
+                  你實際用了幾張（一般抽取式）
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  className="w-full p-3 border rounded-lg bg-green-100 shadow-inner"
+                  value={poop.actualUsed}
+                  onChange={(e) =>
+                    handlePoopChange(index, "actualUsed", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          ))}
 
           <button
             type="submit"
@@ -200,14 +200,23 @@ function App() {
         </form>
       )}
 
-      {result && (
-        <div className="mt-8 text-center bg-white p-6 rounded-2xl shadow-xl space-y-4">
-          <div className="text-xl font-semibold text-green-800">
-            {result.usage}
-          </div>
-          <div className="text-gray-700 font-medium">{result.suggestion}</div>
-          <div className="text-green-600 font-bold text-lg animate-bounce">
-            {result.ecoMessage}
+      {/* Modal */}
+      {showModal && result && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-2xl shadow-2xl w-11/12 max-w-md text-center space-y-4">
+            <div className="text-xl font-semibold text-green-800">
+              {result.usage}
+            </div>
+            <div className="text-gray-700 font-medium">{result.suggestion}</div>
+            <div className="text-green-600 font-bold text-lg animate-bounce">
+              {result.ecoMessage}
+            </div>
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-full"
+            >
+              關閉
+            </button>
           </div>
         </div>
       )}
